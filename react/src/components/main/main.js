@@ -23,6 +23,9 @@ import TextDialog from '../../containers/TextDialog/TextDialog';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThemeProvider } from '@material-ui/core';
 import MainTheme from '../../styles/themes/main'
+import { QueryClient, QueryClientProvider, useQuery } from 'react-query'
+ 
+const queryClient = new QueryClient()
 
 class Main extends React.Component {
   constructor(props) {
@@ -187,25 +190,27 @@ class Main extends React.Component {
 
   render() {
     return (
-      <ThemeProvider theme={MainTheme}>
-        <CssBaseline />
-        <div className="main-container">
-          <SnackbarAlert />
-          {this.props.textdialog.open && (
-            <TextDialog {...this.props.textdialog} />
-          )}
-          <Modal />
-          {this.state.initializing ? (
-            <SplashScreen />
-          ) : this.props.loggingOut ? (
-            <LogoutScreen />
-          ) : this.props.mainPathArray[0] === POST_AUTH ? (
-            <PostAuth />
-          ) : (
-            <PreAuth />
-          )}
-        </div>
-      </ThemeProvider>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider theme={MainTheme}>
+          <CssBaseline />
+          <div className="main-container">
+            <SnackbarAlert />
+            {this.props.textdialog.open && (
+              <TextDialog {...this.props.textdialog} />
+            )}
+            <Modal />
+            {this.state.initializing ? (
+              <SplashScreen />
+            ) : this.props.loggingOut ? (
+              <LogoutScreen />
+            ) : this.props.mainPathArray[0] === POST_AUTH ? (
+              <PostAuth />
+            ) : (
+              <PreAuth />
+            )}
+          </div>
+        </ThemeProvider>
+      </QueryClientProvider>
     );
   }
 }
