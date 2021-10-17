@@ -62,7 +62,7 @@ export const CoinWalletRender = function() {
           display: "flex",
           padding: 0,
           border: "none",
-          overflowX: "scroll",
+          overflowX: "auto",
         }}
       >
         <WalletPaper
@@ -501,7 +501,7 @@ export const WalletRenderBalances = function() {
         backgroundColor: "#ffffff",
         paddingLeft: 8,
         paddingRight: 8,
-        overflowX: "scroll",
+        overflowX: "auto",
         display: "flex",
       }}
     >
