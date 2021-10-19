@@ -298,7 +298,7 @@ export const EarningTable = (earningStats, coin, fiatCurr, hypothetical = false)
       >
         {`${!hypothetical ? 'Est. Earnings' : 'Hypothetical Earnings'} ${percent.year != null ? ` - ${percent.year}% ROI ` : ''}(current rate)`}
       </WalletPaper>
-      <div style={{ height: "100%", display: "flex", flex: 1, overflow: "scroll" }}>
+      <div style={{ height: "100%", display: "flex", flex: 1, overflow: "auto" }}>
         {columns.map((column, index) => {
           const { key } = column;
           return (

@@ -19,7 +19,7 @@ export const ClaimInterestFormRender = function() {
         alignItems: formStep === ENTER_DATA ? "flex-start" : "unset",
         marginBottom: formStep === ENTER_DATA ? 0 : 20,
         flexDirection: "column",
-        overflowY: "scroll"
+        overflowY: "auto"
       }}
     >
       { this.props.formStep === ENTER_DATA ? ClaimInterestFormEnterRender.call(this) : ClaimInterestTxDataRender.call(this) }

@@ -407,7 +407,7 @@ class IdentityCard extends React.Component {
                 </div>
               </ExpansionPanelSummary>
               <ExpansionPanelDetails
-                style={{ maxHeight: 300, overflow: "scroll" }}
+                style={{ maxHeight: 300, overflow: "auto" }}
               >
                 <ObjectToTable
                   dataObj={Object.assign({}, identity.primaryaddresses)}
@@ -440,7 +440,7 @@ class IdentityCard extends React.Component {
                 </div>
               </ExpansionPanelSummary>
               <ExpansionPanelDetails
-                style={{ maxHeight: 300, overflow: "scroll" }}
+                style={{ maxHeight: 300, overflow: "auto" }}
               >
                 <ObjectToTable
                   dataObj={identity.contentmap}

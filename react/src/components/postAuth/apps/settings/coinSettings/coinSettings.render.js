@@ -144,7 +144,7 @@ export const CoinSettingsOptionsRender = function() {
               maxHeight: 600,
               borderColor: "rgb(49, 101, 212)",
               borderWidth: 1,
-              overflow: "scroll",
+              overflow: "auto",
             }}
             msg='Welcome to the native client terminal! Enter "run" (without quotes) followed by a command name, followed by command parameters.'
             commands={{

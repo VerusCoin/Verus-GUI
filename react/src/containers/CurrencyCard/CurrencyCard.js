@@ -426,7 +426,7 @@ class CurrencyCard extends React.Component {
               );
             }}
           />
-          <CardContent style={{ height: "90%", overflow: "scroll" }}>
+          <CardContent style={{ height: "90%", overflow: "auto" }}>
             <ExpansionPanel square expanded={false}>
               <ExpansionPanelSummary
                 expandIcon={null}
@@ -586,7 +586,7 @@ class CurrencyCard extends React.Component {
                   </div>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails
-                  style={{ maxHeight: 300, overflow: "scroll" }}
+                  style={{ maxHeight: 300, overflow: "auto" }}
                 >
                   {spendableTo && (
                     <div
@@ -753,7 +753,7 @@ class CurrencyCard extends React.Component {
                   </div>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails
-                  style={{ maxHeight: 300, overflow: "scroll" }}
+                  style={{ maxHeight: 300, overflow: "auto" }}
                 >
                   {preallocation.length !== 0 && (
                     <div

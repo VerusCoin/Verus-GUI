@@ -10,7 +10,7 @@ export const DashboardRender = function() {
   return (
     <div
       className="col-md-8 col-lg-9"
-      style={{ padding: 16, overflow: "scroll" }}
+      style={{ padding: 16, overflow: "auto" }}
     >
       <WalletPaper
         style={{
@@ -157,7 +157,7 @@ export const DashboardRenderPie = function() {
 
 export const DashboardRenderTable = function() {
   return (
-    <div className="table-responsive" style={{maxHeight: 600, overflowY: "scroll"}}>
+    <div className="table-responsive" style={{maxHeight: 600, overflowY: "auto"}}>
       <table className="table table-striped">
         <thead>
           <tr />

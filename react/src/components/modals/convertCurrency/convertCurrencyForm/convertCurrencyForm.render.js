@@ -654,7 +654,7 @@ export const ConvertCurrencyFormAdvancedRender = function() {
           alignItems: "stretch",
           justifyContent: "space-between",
           maxHeight: 400,
-          overflow: "scroll",
+          overflow: "auto",
         }}
       >
         {this.state.outputs.map((output, index) => {

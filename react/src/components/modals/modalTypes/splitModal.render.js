@@ -29,7 +29,7 @@ export const SplitModalRender = function(content) {
           alignItems: "stretch",
           minHeight: 600,
           padding: 0,
-          overflow: 'scroll',
+          overflow: "auto",
           minWidth: 800
         }}
       >
@@ -203,7 +203,7 @@ export const SplitModalRender = function(content) {
               paddingBottom: 16,
               paddingLeft: 16,
               paddingRight: 16,
-              overflow: "scroll",
+              overflow: "auto",
             }}
           >
             {content}

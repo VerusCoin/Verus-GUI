@@ -54,7 +54,7 @@ export const CoinWalletRender = function() {
   return (
     <div
       className="col-md-8 col-lg-9"
-      style={{ padding: 16, width: "80%", overflow: "scroll" }}
+      style={{ padding: 16, width: "80%", overflow: "auto" }}
     >
       <WalletPaper
         style={{

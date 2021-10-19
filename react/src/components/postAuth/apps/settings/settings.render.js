@@ -33,7 +33,7 @@ export const SettingsRender = function() {
   };
 
   return (
-    <div className="col-md-8 col-lg-9" style={{ padding: 16, width: "80%", overflow: "scroll" }}>
+    <div className="col-md-8 col-lg-9" style={{ padding: 16, width: "80%", overflow: "auto" }}>
       <div style={{ display: "flex", justifyContent: "space-between" }}>
         <button
           className="btn btn-primary"
