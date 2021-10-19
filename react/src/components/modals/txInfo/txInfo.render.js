@@ -38,7 +38,7 @@ export const TxInfoRender = function() {
         <Paper
           style={{
             overflowWrap: "break-word",
-            overflow: "scroll",
+            overflow: "auto",
             fontWeight: 400,
             fontSize: 18
           }}

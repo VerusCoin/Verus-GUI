@@ -16,7 +16,7 @@ export const RecoverIdentityFormRender = function() {
         alignItems: formStep === ENTER_DATA ? "flex-start" : "unset",
         marginBottom: formStep === ENTER_DATA ? 0 : 20,
         flexDirection: "column",
-        overflowY: "scroll"
+        overflowY: "auto"
       }}
     >
       { this.props.formStep === ENTER_DATA ? RecoverIdentityFormEnterRender.call(this) : RecoverIdentityTxDataRender.call(this) }

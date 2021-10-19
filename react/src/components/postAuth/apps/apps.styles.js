@@ -52,7 +52,7 @@ export default {
     fontSize: 25
   },
   currencyDropdownMenu: { 
-    overflowY: "scroll", 
+    overflowY: "auto", 
     height: 217 
   },
   tabUnderline: {
@@ -80,7 +80,7 @@ export default {
     width: "100%",
     flexWrap: "nowrap",
     height: "94%",
-    overflowX: "scroll"
+    overflowX: "auto"
   },
   sideBarInnerContainer: { 
     backgroundColor: "#ffffff", 
@@ -91,7 +91,7 @@ export default {
     height: '100%'
   },
   sideBarContainerScroller: { 
-    overflowY: "scroll" 
+    overflowY: "auto" 
   },
   appContentContainer: { 
     paddingRight: 0, 

@@ -44,7 +44,7 @@ export const MiningWalletRender = function() {
   return (
     <div
       className="col-md-8 col-lg-9"
-      style={{ padding: 16, overflow: "scroll" }}
+      style={{ padding: 16, overflow: "auto" }}
     >
       <WalletPaper
         style={{
