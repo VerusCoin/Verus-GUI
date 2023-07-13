@@ -300,14 +300,27 @@ export const MiningWalletFunctions = function() {
             justifyContent: "space-between",
           }}
         >
-          <h6 className="card-title" style={{ fontSize: 14, margin: 0, width: "max-content" }}>
-            {"Bridgekeeper"}
-          </h6>
+          <div
+          style={{
+            backgroundColor: "white",
+            flex: 3,
+            display: "flex",
+            flexDirection: "column",
+            flexBasis: '10%'
+          }}
+        >
+            <h6 className="card-title" style={{ fontSize: 14, margin: 0, width: "max-content" }}>
+              {"Bridgekeeper"}
+            </h6>
+            <h8 className="card-title" style={{ fontSize: 10, margin: 0, width: "max-content" }}>
+              {"(requires mining to be active)"}
+            </h8>
+
+          </div>
           <div style={{ color: `rgb(49, 101, 212)` }}>
             <Switch
               checked={miningInfo?.bridgekeeperstatus?.serverrunning === true}
               onChange={() => toggleBridging(coin)}
-              disabled={miningState === MS_IDLE}
               value="bridging"
               color="primary"
             />

@@ -8,14 +8,14 @@ import {
   ENTER_DATA,
   STARTBRIDGEKEEPER
 } from "../../../util/constants/componentConstants";
-import { updateConfFile, bridgekeeperStatus } from '../../../util/api/verusbridge/verusbridge';
-
+import { updateConfFile, bridgekeeperStatus, getConfFile } from '../../../util/api/verusbridge/verusbridge';
+const { shell } = window.bridge
 
 class Bridgekeeper extends React.Component {
   constructor(props) {
     super(props);
 
-    props.setModalHeader("BridgeKeeper setup")
+    props.setModalHeader("Bridgekeeper setup")
     this.state = {
       formStep: ENTER_DATA,
       txData: {},
@@ -25,7 +25,8 @@ class Bridgekeeper extends React.Component {
       continueDisabled: true,
       logData: null,
       ethKey: '',
-      infuraNode: ''
+      infuraNode: '',
+      showPassword: false
     }
 
     this.getFormData = this.getFormData.bind(this)
@@ -34,7 +35,27 @@ class Bridgekeeper extends React.Component {
     this.setConfFile = this.setConfFile.bind(this)
     this.getBridgekeeperInfo = this.getBridgekeeperInfo.bind(this)
     this.updateInput = this.updateInput.bind(this)
+    this.openInfura = this.openInfura.bind(this)
+    this.handleClickShowPrivkey = this.handleClickShowPrivkey.bind(this)
+    this.handleMouseDownPrivkey = this.handleMouseDownPrivkey.bind(this)
   }
+
+  async componentDidMount() {
+    const { id } = this.props.activeCoin
+    const { result } = await getConfFile(id)
+    const { privatekey, ethnode } = result;
+
+    if(privatekey) this.setState({ ethKey: privatekey });
+    if(ethnode) this.setState({ infuraNode: ethnode });
+  }
+
+  handleClickShowPrivkey() {
+     this.setState({ showPassword: !this.state.showPassword });
+  }
+
+  handleMouseDownPrivkey(event){
+    event.preventDefault();
+  };
 
   getFormData(formData) {    
     this.setState({ formData })
@@ -50,6 +71,10 @@ class Bridgekeeper extends React.Component {
       txData: {},
       formData: {}
     })
+  }
+
+  openInfura() {
+    shell.openExternal("https://www.infura.io/")
   }
 
   updateLog(text) {

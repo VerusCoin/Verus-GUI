@@ -492,3 +492,4 @@ export const API_BRIDGEKEEPER_START = 'start_bridgekeeper'
 export const API_BRIDGEKEEPER_STOP = 'stop_bridgekeeper'
 export const API_BRIDGEKEEPER_STATUS = "bridgekeeper_status"
 export const API_BRIDGEKEEPER_SETCONF = "bridgekeeper_setconf"
+export const API_BRIDGEKEEPER_GETCONF = "bridgekeeper_getconf"

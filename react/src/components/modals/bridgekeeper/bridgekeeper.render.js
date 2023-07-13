@@ -2,12 +2,16 @@ import React from "react";
 import { CONFIRM_DATA, API_SUCCESS, SEND_RESULT } from "../../../util/constants/componentConstants";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
-import SimpleLoader from "../../../containers/SimpleLoader/SimpleLoader";
+import Link from "@material-ui/core/Link";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import IconButton from '@material-ui/core/IconButton';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
 export const BridgekeeperRender = function () {
-  const { startBridgekeeper, getBridgekeeperInfo, state, back, props, updateInput, setConfFile } =
+  const { startBridgekeeper, getBridgekeeperInfo, state, back, props, updateInput, setConfFile, openInfura, handleClickShowPrivkey, handleMouseDownPrivkey } =
     this;
-  const { loading, continueDisabled, formStep, txData, logData, ethKey, infuraNode } = state;
+  const { loading, continueDisabled, formStep, txData, logData, ethKey, infuraNode, showPassword } = state;
   const { closeModal } = props;
 
   return (
@@ -16,22 +20,39 @@ export const BridgekeeperRender = function () {
         error={false}
         label="Enter Ethereum Private Key"
         variant="outlined"
+        type={showPassword ? 'text' : 'password'}
         onChange={updateInput}
-        placeholder="0x..........."
+        placeholder="Hex Key"
         name="ethKey"
         value={ethKey}
         style={{ marginTop: 5, width: "100%" }}
+        InputProps={{
+          endAdornment: <InputAdornment position="end">
+            <IconButton
+              aria-label="toggle privatekey visibility"
+              onClick={handleClickShowPrivkey}
+              onMouseDown={handleMouseDownPrivkey}
+              edge="end"
+            >
+            {showPassword ? <VisibilityOff /> : <Visibility />}
+          </IconButton>
+        </InputAdornment>
+        }}
       />
       <TextField
         error={false}
-        label="Enter infura Endpoint"
+        label="Enter websocket Endpoint"
         variant="outlined"
-        placeholder="https://goerli.infura.io/v3/......"
+        placeholder="wws://goerli.infura.io/v3/......"
         onChange={updateInput}
         name="infuraNode"
         value={infuraNode}
         style={{ marginTop: 10, width: "100%" }}
       />
+      <Link href="#" onClick={() => {
+           openInfura();
+        }}>learn more at infura.io.
+      </Link>
       <div
         style={{
           display: "flex",

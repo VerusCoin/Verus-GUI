@@ -1,5 +1,5 @@
 import { getApiData } from '../callCreator'
-import { API_BRIDGEKEEPER_START, API_BRIDGEKEEPER_STOP, API_BRIDGEKEEPER_STATUS, API_BRIDGEKEEPER_SETCONF, NATIVE } from '../../constants/componentConstants'
+import { API_BRIDGEKEEPER_START, API_BRIDGEKEEPER_STOP, API_BRIDGEKEEPER_STATUS, API_BRIDGEKEEPER_SETCONF, API_BRIDGEKEEPER_GETCONF, NATIVE } from '../../constants/componentConstants'
 
 export const startBridgekeeperprocess = async (chainTicker) => {
   let params = { chainTicker }
@@ -41,6 +41,16 @@ export const updateConfFile = async (chainTicker, key, infuraLink, ethContract) 
 
   try {
     return await getApiData(NATIVE, API_BRIDGEKEEPER_SETCONF, params);
+  } catch (e) {
+    throw e;
+  }
+};
+
+export const getConfFile = async (chainTicker) => {
+  let params = { chainTicker }
+
+  try {
+    return await getApiData(NATIVE, API_BRIDGEKEEPER_GETCONF, params);
   } catch (e) {
     throw e;
   }
