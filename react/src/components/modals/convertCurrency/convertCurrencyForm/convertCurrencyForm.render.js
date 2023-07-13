@@ -288,7 +288,7 @@ export const ConvertCurrencyConfirmSimpleRender = function() {
           <ErrorOutlineIcon style={{ marginRight: 8, marginLeft: 8 }} />
           <div style={{ fontSize: 14 }}>
             {
-              "Estimated price may vary from actual price, due to all conversions per block happening simultaneously"
+              "Estimated price may vary from actual price, due to all conversions per block happening simultaneously. The estimated fee does not currently take into account cross-chain fees (only relevant when sending off-chain or off-system), which may be significant. Fees will be more accurately estimated in a future update."
             }
           </div>
         </div>
@@ -617,7 +617,7 @@ export const ConvertCurrencyFormSimpleRender = function() {
           <ErrorOutlineIcon style={{ marginRight: 8, marginLeft: 8 }} />
           <div style={{ fontSize: 14 }}>
             {
-              "Estimated price may vary from actual price, due to all conversions per block happening simultaneously"
+              "Estimated price may vary from actual price, due to all conversions per block happening simultaneously. The estimated fee does not currently take into account cross-chain fees (only relevant when sending off-chain or off-system), which may be significant. Fees will be more accurately estimated in a future update."
             }
           </div>
         </div>
