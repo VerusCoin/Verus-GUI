@@ -30,7 +30,6 @@ class OperationInfo extends React.Component {
         : {};
     
     let opDataSchema = {
-      ["Status"]: opObj.status,
       ["Daemon Command"]: opObj.method,
       ["Transaction ID"]: opObj.result ? opObj.result.txid : null,
       ["Creation Time"]: timeConverter(opObj.creation_time),

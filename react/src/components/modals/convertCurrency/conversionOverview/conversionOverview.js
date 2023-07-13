@@ -63,7 +63,7 @@ class ConversionOverview extends React.Component {
         const via = transfer.via;
         const params = transfer.operation.params[transfer.index];
 
-        if (checkTerm(this.getStatusString(transfer.tx))) return true;
+        if (checkTerm(this.getStatusString(transfer.tx, transfer.operation))) return true;
 
         if (transfer.tx) {
           if (checkTerm(transfer.tx.txid)) return true;
@@ -93,8 +93,11 @@ class ConversionOverview extends React.Component {
     });
   }
 
-  getStatusString(tx) {
-    return tx == null ? "failed" : tx.confirmations ? "sent" : "pending";
+  getStatusString(tx, operation = {}) {
+    return operation.status === "executing" ? 
+                "pending" 
+              : 
+                tx == null ? "failed" : tx.confirmations ? "sent" : "pending";
   }
 
   clearTransferSearch() {

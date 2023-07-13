@@ -202,7 +202,7 @@ export const ConvertCurrencyConfirmSimpleRender = function() {
             marginRight: 4,
             marginLeft: 4,
           }}
-          label="Fee"
+          label="Estimated Fee"
           variant="outlined"
           value={`${fee} ${output.currency}`}
           InputProps={{

@@ -172,7 +172,7 @@ export const ConversionTableRender = function() {
                     textOverflow: "ellipsis",
                   }}
                 >
-                  {this.getStatusString(rowData.tx)}
+                  {this.getStatusString(rowData.tx, rowData.operation)}
                 </div>
               );
             },
