@@ -672,7 +672,7 @@ export const WalletRenderBalances = function() {
                           fontSize: 14,
                         }}
                       >
-                        {`${balanceFiat} ${this.props.fiatCurrency}`}
+                        {this.props.selectedCurrency !== this.props.coin ? '-' : `${balanceFiat} ${this.props.fiatCurrency}`}
                       </h1>
                     </div>
                     <div
