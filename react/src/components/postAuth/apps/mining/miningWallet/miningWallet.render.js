@@ -313,7 +313,7 @@ export const MiningWalletFunctions = function() {
               {"Bridgekeeper"}
             </h6>
             <h8 className="card-title" style={{ fontSize: 10, margin: 0, width: "max-content" }}>
-              {"(requires mining to be active)"}
+              {"(requires mining or staking to be active)"}
             </h8>
 
           </div>
