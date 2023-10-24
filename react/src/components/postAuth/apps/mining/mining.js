@@ -135,12 +135,16 @@ class Mining extends React.Component {
   async toggleBridging(chainTicker) {
     const { miningInfo, dispatch } = this.props
     let reply = {};
+    const SERVER_OFF = 0;
+    const SERVER_OK = 1;
+    const SERVER_RPC_FAULT = 2;
+    const SERVER_WEBSOCKET_FAULT = 3;
     if (miningInfo[chainTicker].bridgekeeperstatus) {
       try {
         this.props.dispatch(startLoadingMiningFunctions(chainTicker))
         
         // Try to dispatch call to stop or start staking
-        if (miningInfo[chainTicker].bridgekeeperstatus?.serverrunning) {
+        if (miningInfo[chainTicker].bridgekeeperstatus?.serverrunning !== SERVER_OFF) {
           reply = await stopBridgekeeperprocess(chainTicker);
           
         } else {
