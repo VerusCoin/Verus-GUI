@@ -18,7 +18,11 @@ import GeneratorCard from "../../../../../containers/GeneratorCard/GeneratorCard
 import { FormControl, Select, MenuItem, Switch } from "@material-ui/core";
 import NetworkOverviewCard from "../../../../../containers/NetworkOverviewCard/NetworkOverviewCard";
 import AppsStyles from '../../apps.styles'
-
+import ErrorIcon from '@material-ui/icons/Error';
+const SERVER_OFF = 0;
+const SERVER_OK = 1;
+const SERVER_RPC_FAULT = 2;
+const SERVER_WEBSOCKET_FAULT = 3;
 export const MiningWalletRender = function() {
   const {
     miningState,
@@ -310,16 +314,16 @@ export const MiningWalletFunctions = function() {
           }}
         >
             <h6 className="card-title" style={{ fontSize: 14, margin: 0, width: "max-content" }}>
-              {"Bridgekeeper"}
+              {"Bridgekeeper"}{(miningInfo?.bridgekeeperstatus?.serverrunning) > SERVER_OK &&<ErrorIcon style={{ color: "red" }}></ErrorIcon>}
             </h6>
             <h8 className="card-title" style={{ fontSize: 10, margin: 0, width: "max-content" }}>
-              {"(requires mining or staking to be active)"}
+              {"(Requires mining or staking to be active)"}
             </h8>
 
           </div>
           <div style={{ color: `rgb(49, 101, 212)` }}>
             <Switch
-              checked={miningInfo?.bridgekeeperstatus?.serverrunning === true}
+              checked={(miningInfo?.bridgekeeperstatus?.serverrunning) > SERVER_OFF}
               onChange={() => toggleBridging(coin)}
               value="bridging"
               color="primary"
