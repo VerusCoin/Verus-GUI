@@ -10,7 +10,7 @@ import {
 } from "../../../util/constants/componentConstants";
 import { updateConfFile, bridgekeeperStatus, getConfFile } from '../../../util/api/verusbridge/verusbridge';
 const { shell } = window.bridge
-
+const SERVER_OK = 1;
 class Bridgekeeper extends React.Component {
   constructor(props) {
     super(props);
@@ -45,12 +45,11 @@ class Bridgekeeper extends React.Component {
     if (ethnode) this.setState({ infuraNode: ethnode });
     const statusReply = await bridgekeeperStatus(id);
 
-    if (statusReply?.result?.serverrunning) {
+    if (statusReply?.result?.serverrunning === SERVER_OK) {
       this.setState({ bridgeKeeperActive: true });
     }
 
   }
-
 
   getFormData(formData) {
     this.setState({ formData })
@@ -89,10 +88,6 @@ class Bridgekeeper extends React.Component {
 
   }
 
-  // TODO: The GUI needs to have a another status function that returns the error state of the bridge
-  // Also the  GUI needs to have a function which enables the user to pass their infrua node + ETH private key
-  // The bridge needs to be changed to give endpoints for the above functions.
-
   updateInput(e, value = false) {
     this.setState({
       [e.target.name]:
@@ -114,7 +109,7 @@ class Bridgekeeper extends React.Component {
 
     if (statusReply?.result && statusReply?.result?.logs?.length > 1) {
       this.updateLog(statusReply?.result?.logs);
-    } else if (statusReply?.result && statusReply.result.serverrunning) {
+    } else if (statusReply?.result && statusReply.result.serverrunning === SERVER_OK) {
       this.updateLog("Bridgekeeper server running but no status information available yet...");
     } else {
       this.updateLog("No status information available yet, or bridge not running");
