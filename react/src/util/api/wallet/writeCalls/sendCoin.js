@@ -72,6 +72,7 @@ export const sendElectrum = async (
 
     // TODO: Optionally increase or decrease fee amount
     if (tryFeeFetch.msg === API_SUCCESS) feePerByte = tryFeeFetch.result.mid
+    else if (tryFeeFetch.result && tryFeeFetch.result !== 'Network fee function not found') throw new Error("Failed to fetch network fees")
   }
 
   return await getApiData(
