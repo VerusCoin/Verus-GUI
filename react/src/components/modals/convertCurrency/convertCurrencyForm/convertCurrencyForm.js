@@ -44,7 +44,8 @@ class ConvertCurrencyForm extends React.Component {
       addresses: [],
       formStep: ENTER_DATA,
       confirmOutputIndex: 0,
-      controlAmounts: true
+      controlAmounts: true,
+      loading: false
     };
 
     this.updateOutput = this.updateOutput.bind(this)
@@ -192,7 +193,17 @@ class ConvertCurrencyForm extends React.Component {
   }
 
   async confirmSend() {
+    if (this.state.loading) return;
+
+    const setLoadingTrue = () => new Promise((resolve) => {
+      this.setState({ loading: true }, () => {
+        resolve();
+      })
+    })
+
     try {
+      await setLoadingTrue()
+
       const response = await sendCurrency(
         this.props.modalProps.chainTicker,
         this.state.fromAddress,
@@ -251,6 +262,10 @@ class ConvertCurrencyForm extends React.Component {
       
     } catch(e) {
       this.props.dispatch(newSnackbar(ERROR_SNACK, "Error: " + e.message))
+    } finally {
+      this.setState({
+        loading: false
+      })
     }
   }
 

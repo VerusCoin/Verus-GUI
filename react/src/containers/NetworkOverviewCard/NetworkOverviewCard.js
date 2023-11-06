@@ -22,15 +22,15 @@ function NetworkOverviewCard(props) {
     conditionallyUpdateWallet(store.getState(), store.dispatch, NATIVE, coin, API_GET_MININGINFO);
   }, [info]);
 
-  const _supply = currentSupply != null ? normalizeNum(currentSupply.total) : null;
+  const _supply = currentSupply != null && currentSupply.total != null ? normalizeNum(Number(currentSupply.total)) : null;
   const _supplyError = currentSupplyError[coin];
-  const _reward = blockReward != null ? normalizeNum(blockReward.miner) : null;
+  const _reward = blockReward != null && blockReward.miner != null ? normalizeNum(Number(blockReward.miner)) : null;
 
   const currentTime = Math.round(new Date().getTime() / 1000);
   const timeSinceLastBlock =
     info && currentTime - info.tiptime > 0 ? currentTime - info.tiptime : null;
 
-  const netHashrate = miningInfo != null ? normalizeNum(miningInfo.networkhashps) : null;
+  const netHashrate = miningInfo != null && miningInfo.networkhashps != null ? normalizeNum(Number(miningInfo.networkhashps)) : null;
 
   const displayedSystemData = {
     ["Network Hashrate"]: {

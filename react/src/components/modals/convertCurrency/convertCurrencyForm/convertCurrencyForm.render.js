@@ -880,6 +880,7 @@ export const ConvertCurrencyFormAdvancedRender = function() {
           title={isConfirmStep ? "Confirm" : "Convert currencies"}
           backgroundColor={"rgb(49, 101, 212)"}
           textColor={"white"}
+          disabled={this.state.loading}
           buttonProps={{
             size: "large",
             color: "default",
