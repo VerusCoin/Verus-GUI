@@ -190,6 +190,7 @@
     "follow-redirects": "1.14.8",
     "shelljs": "0.8.5",
     "jsonpointer": "5.0.0",
-    "json-schema": "0.4.0"
+    "json-schema": "0.4.0",
+    "browserify-sign": "4.2.2"
   }
 }
