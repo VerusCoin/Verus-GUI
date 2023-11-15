@@ -216,7 +216,7 @@ export const ConvertCurrencyConfirmSimpleRender = function() {
           }}
           label="Receive (Estimated)"
           variant="outlined"
-          value={`${Number((output.amount * price).toFixed(8))} ${
+          value={`${this.state.conversionEstimate == null ? "Unknown" : this.state.conversionEstimate.estimatedcurrencyout} ${
             conversionPaths[selectedConversionPath]
               ? conversionPaths[selectedConversionPath].destination.name
               : output.convertto
@@ -298,21 +298,21 @@ export const ConvertCurrencyConfirmSimpleRender = function() {
 };
 
 export const ConvertCurrencyFormSimpleOptionText = function (conversionPath) {
-  const priceFixed = Number(conversionPath.price.toFixed(2))
-  
-  return `${conversionPath.destination.name}${
+  const { via, destination } = conversionPath;
+  const destLabel = destination.fullyqualifiedname ? destination.fullyqualifiedname : destination.name
+  const viaLabel = via == null ? null : via.fullyqualifiedname ? via.fullyqualifiedname : via.name
+
+  return `${destLabel}${
     conversionPath.via
       ? ` (${
           conversionPath.exportto ? (conversionPath.gateway ? "off-system " : "off-chain ") : ""
-        }via ${conversionPath.via.name})`
+        }via ${viaLabel})`
       : conversionPath.exportto
       ? conversionPath.gateway
         ? " (off-system)"
         : " (off-chain)"
       : ""
-  } [${
-    priceFixed === 0 ? "<0.01" : priceFixed === conversionPath.price ? priceFixed : `~${priceFixed}`
-  }]`;
+  }`;
 };
 
 export const ConvertCurrencyFormSimpleRender = function() {
@@ -323,7 +323,6 @@ export const ConvertCurrencyFormSimpleRender = function() {
     address,
     via,
     sendAmount,
-    receiveAmount,
     exportto
   } = this.state.outputs[0];
   const price = this.state.conversionPaths[this.state.selectedConversionPath]
@@ -395,7 +394,7 @@ export const ConvertCurrencyFormSimpleRender = function() {
               variant="outlined"
               size="small"
               onChange={(e) => this.updateSimpleFormAmount(e, true)}
-              value={this.state.controlAmounts ? amount : sendAmount == null ? "" : sendAmount}
+              value={sendAmount}
               style={{ flex: 1, marginRight: 4 }}
             />
             <SuggestionInput
@@ -444,19 +443,14 @@ export const ConvertCurrencyFormSimpleRender = function() {
           }`}</div>
           <div style={{ display: "flex", marginTop: 8 }}>
             <TextField
-              label="Amount"
+              label="Est. amount"
               variant="outlined"
               size="small"
-              onChange={(e) => this.updateSimpleFormAmount(e, false)}
+              disabled={true}
               value={
-                this.state.controlAmounts
-                  ? Number((amount * price).toFixed(8))
-                  : receiveAmount == null
-                  ? ""
-                  : receiveAmount
+                this.state.fetchingEstimate ? "Loading..." : this.state.conversionEstimate == null ? "" : this.state.conversionEstimate.estimatedcurrencyout
               }
               style={{ flex: 1, marginRight: 4 }}
-              disabled={this.state.conversionPaths.length == 0}
             />
             <SuggestionInput
               value={
@@ -474,7 +468,7 @@ export const ConvertCurrencyFormSimpleRender = function() {
                     this.state.conversionPaths[b].destination.name
                   );
                 })}
-              label={`Currency [estimated price]`}
+              label={'Currency'}
               size="small"
               grouped={false}
               freeSolo={false}
@@ -549,7 +543,13 @@ export const ConvertCurrencyFormSimpleRender = function() {
             square={false}
           >
             <div style={{ fontWeight: "bold" }}>{`Est. price per ${currency ? currency : "-"}: ${
-              this.state.selectedConversionPath != null ? Number(price.toFixed(8)) : "-"
+              this.state.fetchingEstimate ? 
+                "Loading..." 
+                : 
+                this.state.conversionEstimate == null ? 
+                  "-" 
+                  : 
+                  Number((this.state.conversionEstimate.estimatedcurrencyout / this.state.conversionEstimate.netinputamount).toFixed(8))
             }`}</div>
           </WalletPaper>
         </div>
