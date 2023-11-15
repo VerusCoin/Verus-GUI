@@ -17,7 +17,7 @@ import {
   SIMPLE_CONVERSION,
   WHITELISTS,
 } from "../../../../util/constants/componentConstants";
-import { getCurrencyConversionPaths, getIdentity, getRefundAddress, sendCurrency } from '../../../../util/api/wallet/walletCalls';
+import { estimateConversion, getCurrencyConversionPaths, getIdentity, getRefundAddress, sendCurrency } from '../../../../util/api/wallet/walletCalls';
 import { expireData, newSnackbar, updateLocalWhitelists } from '../../../../actions/actionCreators';
 
 class ConvertCurrencyForm extends React.Component {
@@ -35,7 +35,6 @@ class ConvertCurrencyForm extends React.Component {
         memo: "",
         preconvert: "",
         sendAmount: "",
-        receiveAmount: ""
       }],
       estArrivals: [],
       conversionPaths: [],
@@ -45,7 +44,11 @@ class ConvertCurrencyForm extends React.Component {
       formStep: ENTER_DATA,
       confirmOutputIndex: 0,
       controlAmounts: true,
-      loading: false
+      loading: false,
+
+      fetchingEstimate: false,
+      conversionEstimate: null,
+      lastSimpleAmountChange: 0
     };
 
     this.updateOutput = this.updateOutput.bind(this)
@@ -65,6 +68,8 @@ class ConvertCurrencyForm extends React.Component {
     this.addToWhitelist = this.addToWhitelist.bind(this)
 
     this.outputsEnd = null;
+
+    this.AMOUNT_CHANGE_FETCH_ESTIMATE_COOLDOWN = 400
   }
 
   async componentDidMount() {
@@ -92,7 +97,6 @@ class ConvertCurrencyForm extends React.Component {
         memo: "",
         preconvert: "",
         sendAmount: "",
-        receiveAmount: "",
         exportto: ""
       }],
       estArrivals: [],
@@ -102,7 +106,11 @@ class ConvertCurrencyForm extends React.Component {
       addresses: [],
       formStep: ENTER_DATA,
       confirmOutputIndex: 0,
-      controlAmounts: true
+      controlAmounts: true,
+
+      fetchingEstimate: false,
+      conversionEstimate: null,
+      lastSimpleAmountChange: 0
     }, () => {
       this.processAddresses()
     })
@@ -284,44 +292,87 @@ class ConvertCurrencyForm extends React.Component {
     })
   }
 
-  updateSimpleFormAmount(e, isSend) {
-    const validInput = this.isValidAmount(e.target.value)
+  async updateConversionEstimate() {
+    if ((Date.now() - this.state.lastSimpleAmountChange) > this.AMOUNT_CHANGE_FETCH_ESTIMATE_COOLDOWN) {
+      const { outputs } = this.state
 
-    if (isSend) {
-      this.updateOutput(
-        "sendAmount",
-        e.target.value || ""
-      )
-
-      if (validInput) {
-        this.setControlAmounts(true)
-        this.updateOutput(
-          "amount",
-          Number(e.target.value)
-        )
-      } else {
-        this.setControlAmounts(false)
-      }
-    } else {
-      this.updateOutput(
-        "receiveAmount",
-        e.target.value || ""
-      )
-
-      if (validInput) {
-        const price = this.state.conversionPaths[this.state.selectedConversionPath]
-        ? this.state.conversionPaths[this.state.selectedConversionPath].price
-        : 0;
-
-        this.setControlAmounts(true);
-        this.updateOutput(
-          "amount",
-          Number(price === 0 ? 0 : (Number(e.target.value) / price).toFixed(8))
-        );
-      } else {
-        this.setControlAmounts(false);
+      try {
+        if (outputs[0] != null) {
+          const pricingOutput = outputs[0];
+          const { currency, amount, convertto, via, preconvert } = pricingOutput;
+  
+          if (
+            currency != null && 
+            amount != null && 
+            convertto != null && 
+            currency.length != 0 && 
+            amount != 0 && 
+            convertto.length != 0
+          ) {
+            const estimate = await estimateConversion(
+              NATIVE, 
+              this.props.modalProps.chainTicker, 
+              { currency, amount, convertto, preconvert, via}
+            )
+  
+            if (estimate.msg === 'success') {
+              this.setState({
+                fetchingEstimate: false,
+                conversionEstimate: estimate.result
+              })
+            } else {
+              this.setState({
+                fetchingEstimate: false,
+                conversionEstimate: null
+              })
+            }
+          } else {
+            this.setState({
+              fetchingEstimate: false,
+              conversionEstimate: null
+            })
+          }
+        }
+      } catch(e) {
+        this.setState({
+          fetchingEstimate: false,
+          conversionEstimate: null
+        })
       }
     }
+  }
+
+  updateSimpleFormAmount(e) {
+    const amount = e.target.value;
+
+    setTimeout(() => {
+      this.updateConversionEstimate()
+    }, this.AMOUNT_CHANGE_FETCH_ESTIMATE_COOLDOWN + 100)
+
+    this.setState({
+      lastSimpleAmountChange: Date.now(),
+      conversionEstimate: null,
+      fetchingEstimate: true
+    }, () => {
+      const validInput = this.isValidAmount(amount)
+
+      this.updateOutput(
+        "sendAmount",
+        amount
+      )
+  
+      if (validInput) {
+        this.updateOutput(
+          "amount",
+          Number(amount)
+        )
+      } else {
+        this.updateOutput(
+          "amount",
+          0
+        )
+      }
+    })
   }
 
   isValidAmount(input) {
@@ -368,7 +419,6 @@ class ConvertCurrencyForm extends React.Component {
         memo: "",
         preconvert: "",
         sendAmount: "",
-        receiveAmount: "",
         exportto: ""
       }]
     })
@@ -388,9 +438,11 @@ class ConvertCurrencyForm extends React.Component {
 
   selectConversionPath(path) {
     this.setState({
-      selectedConversionPath: path
+      selectedConversionPath: path,
+      conversionEstimate: null,
+      fetchingEstimate: true
     }, () => {
-      if (path != null) {        
+      if (path != null) {    
         const selectedPathObj = this.state.conversionPaths[path]
 
         this.updateOutput("convertto", selectedPathObj.destination.currencyid)
@@ -399,6 +451,8 @@ class ConvertCurrencyForm extends React.Component {
 
         if (selectedPathObj.exportto) this.updateOutput("exportto", selectedPathObj.exportto)
         else this.updateOutput("exportto", null)
+
+        this.updateConversionEstimate()
       }
     })
   }
