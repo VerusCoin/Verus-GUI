@@ -52,7 +52,7 @@ export const ChainOptionsRender = function() {
     }
   ];
 
-  if (this.props.activeCoin.id === "VRSC") {
+  if (this.props.activeCoin.id === "VRSC" || this.props.activeCoin.id === "VRSCTEST") {
     options.push({
       title: "Bootstrap",
       onClick: () =>
