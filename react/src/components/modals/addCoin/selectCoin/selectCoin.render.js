@@ -259,7 +259,7 @@ export const SelectModeForm = function() {
                 </label>
               </div>
             </div>
-            {this.state.chosenCoin.id === "VRSC" && (
+            {(this.state.chosenCoin.id === "VRSC" || this.state.chosenCoin.id === "VRSCTEST") && (
               <div>
                 <div className="form-check d-flex align-items-center" style={{ padding: 0 }}>
                   <CustomCheckbox
