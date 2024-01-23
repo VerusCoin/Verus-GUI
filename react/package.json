@@ -39,7 +39,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@babel/core": "7.0.0",
+    "@babel/core": "7.1.6",
     "@crello/react-lottie": "0.0.9",
     "@electron/remote": "1.1.0",
     "@material-ui/core": "4.12.3",
@@ -50,7 +50,7 @@
     "blake2b": "https://github.com/VerusCoin/blake2b.git",
     "bufferutil": "4.0.2",
     "clsx": "1.0.4",
-    "crypto-js": "4.0.0",
+    "crypto-js": "4.2.0",
     "ethereumjs-util": "6.2.0",
     "node-vibrant": "3.1.6",
     "passwd-strength": "https://github.com/michaeltout/passwd-strength.git",
@@ -67,7 +67,7 @@
     "redux": "3.6.0",
     "redux-logger": "2.8.2",
     "redux-thunk": "2.2.0",
-    "socket.io-client": "3.1.1",
+    "socket.io-client": "4.5.0",
     "static-eval": "2.0.2",
     "terminal-in-react": "git+https://github.com/VerusCoin/terminal-in-react.git",
     "utf-8-validate": "5.0.3",
@@ -76,7 +76,7 @@
     "verus-zkedid-utils": "git+https://github.com/michaeltout/verus-zkedid-utils.git"
   },
   "devDependencies": {
-    "@babel/core": "7.0.0",
+    "@babel/core": "7.1.6",
     "@babel/plugin-proposal-class-properties": "7.0.0",
     "@babel/plugin-proposal-decorators": "7.0.0",
     "@babel/plugin-proposal-do-expressions": "7.0.0",
@@ -115,7 +115,7 @@
     "protractor": "5.4.0",
     "react-test-renderer": "16.13.1",
     "sass-loader": "7.1.0",
-    "socket.io-client": "3.1.1",
+    "socket.io-client": "4.5.0",
     "style-loader": "0.13.0",
     "uglifyjs-webpack-plugin": "2.2.0",
     "url-loader": "1.1.2",
@@ -179,7 +179,7 @@
     "minimatch": "5.1.0",
     "nth-check": "2.0.1",
     "set-value": "4.0.1",
-    "socket.io-parser": "4.2.1",
+    "socket.io-parser": "4.2.3",
     "node-notifier": "8.0.1",
     "color-string": "1.5.5",
     "is-svg": "4.3.2",
@@ -187,10 +187,11 @@
     "terser": "4.8.1",
     "trim-newlines": "3.0.1",
     "acorn": "6.4.1",
-    "follow-redirects": "1.14.8",
+    "follow-redirects": "1.15.4",
     "shelljs": "0.8.5",
     "jsonpointer": "5.0.0",
     "json-schema": "0.4.0",
-    "browserify-sign": "4.2.2"
+    "browserify-sign": "4.2.2",
+    "xml2js": "0.5.0"
   }
 }
