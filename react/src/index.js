@@ -11,19 +11,22 @@ import store from './store';
 import App from './components/app/app';
 import './styles/index.scss';
 import ErrorBoundary from './components/error/ErrorBoundary';
+import { TerminalContextProvider } from 'react-terminal';
 
 Object.freeze(Object.prototype);
 Object.freeze(Object);
 
 const router = (
   <ErrorBoundary>
-    <Provider store={ store }>
-      <Router history={ hashHistory }>
-        <Route
-          exact path="/"
-          component={ App } />
-      </Router>
-    </Provider>
+    <TerminalContextProvider>
+      <Provider store={ store }>
+        <Router history={ hashHistory }>
+          <Route
+            exact path="/"
+            component={ App } />
+        </Router>
+      </Provider>
+    </TerminalContextProvider>
   </ErrorBoundary>
 );
 
