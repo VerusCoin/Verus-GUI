@@ -10,7 +10,8 @@ import {
   REFUND_ADDR,
   REFUND_FROM_SOURCE,
 } from "../../../../../util/constants/componentConstants";
-import Terminal from 'terminal-in-react';
+//import Terminal from 'terminal-in-react';
+import { ReactTerminal } from "react-terminal";
 import CustomButton from '../../../../../containers/CustomButton/CustomButton';
 
 export const CoinSettingsRender = function() {
@@ -45,31 +46,23 @@ export const CoinSettingsRender = function() {
 export const CoinSettingsTerminalRender = function () {
   return (
     <div className="card-body">
-      <Terminal
-        descriptions={{
-          run: "makes a call to the blockchain daemon based on the next entered parameters",
-        }}
-        backgroundColor="white"
-        color="black"
-        allowTabs={false}
-        hideTopBar={true}
-        startState="maximised"
-        style={{
-          height: "unset",
-          border: "solid",
-          maxWidth: "100%",
-          maxHeight: 600,
-          borderColor: "rgb(49, 101, 212)",
-          borderWidth: 1,
-          overflow: "scroll",
-        }}
-        msg='Welcome to the native client terminal! Enter "run" (without quotes) followed by a command name, followed by command parameters.'
-        commands={{
-          run: {
-            method: this.callDaemonCmd,
-          },
-        }}
-      />
+      <div style={{
+        width: "100%",
+        height: 1000
+      }}>
+        <ReactTerminal
+          commands={{
+            run: this.callDaemonCmd
+          }}
+          defaultHandler={() => "Invalid command, make sure you type 'run' before entering your daemon command."}
+          welcomeMessage={
+            <span>
+              Welcome to the native client terminal! Enter "run" (without quotes) followed by a command name, followed by command parameters.<br />
+            </span>
+          }
+          theme="matrix"
+        />
+      </div>
     </div>
   );
 };
