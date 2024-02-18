@@ -214,9 +214,11 @@ class CoinSettings extends React.Component {
     });
   }
 
-  callDaemonCmd(args, print) {
+  async callDaemonCmd(raw) {
+    const args = raw == null ? [] : raw.split(" ");
+
     // Filter out blank arguments
-    const argsFiltered = args._.filter((arg) => {
+    const argsFiltered = args.filter((arg) => {
       return arg.toString().length > 0;
     });
 
@@ -275,44 +277,36 @@ class CoinSettings extends React.Component {
     });
 
     if (this.COMMAND_OVERRIDES[cliCmd] != null) {
-      print(this.COMMAND_OVERRIDES[cliCmd]);
+      return this.COMMAND_OVERRIDES[cliCmd];
     } else {
       // Make RPC call based on params given
-      customRpcCall(this.props.selectedCoinObj.id, cliCmd, cliCmdsParsed)
-        .then((response) => {
-          if (response) {
-            const { result } = response;
+      const response = await customRpcCall(this.props.selectedCoinObj.id, cliCmd, cliCmdsParsed);
 
-            if (result == null) {
-              print("No response.");
-            } else if (typeof result == "string") {
-              // Format output string in readable format
-              print(
-                `${result
-                  .replace(/{/g, `{`)
-                  .replace(/\\"/g, `"`)
-                  .replace(/\\n/g, `\n`)
-                  .replace(/}/g, `}`)}`
-              );
-            } else if (typeof result == "object") {
-              // Format JSON in readable format
-              print(
-                JSON.stringify(result)
-                  .replace(/,/g, ",\n")
-                  .replace(/":/g, '": ')
-                  .replace(/{/g, "{\n")
-                  .replace(/}/g, "\n}")
-              );
-            } else if (typeof result == "boolean") {
-              print(result ? "true" : "false");
-            } else {
-              print(result);
-            }
+      try {
+        if (response) {
+          const { result } = response;
+
+          if (result == null) {
+            return "No response.";
+          } else if (typeof result == "string") {
+            // Format output string in readable format
+            return <div style={{ whiteSpace: "pre-wrap", maxWidth: 1000, wordWrap: "break-word" }}>{`${result
+              .replace(/{/g, `{`)
+              .replace(/\\"/g, `"`)
+              .replace(/\\n/g, `\n`)
+              .replace(/}/g, `}`)}`}</div>
+          } else if (typeof result == "object") {
+            // Format JSON in readable format
+            return <div style={{ whiteSpace: "pre-wrap", maxWidth: 1000, wordWrap: "break-word" }}>{JSON.stringify(result, null, 2)}</div>
+          } else if (typeof result == "boolean") {
+            return result ? "true" : "false";
+          } else {
+            return result;
           }
-        })
-        .catch((e) => {
-          print(e.message);
-        });
+        } else return "No response."
+      } catch (e) {
+        return e.message;
+      }
     }
   }
 
