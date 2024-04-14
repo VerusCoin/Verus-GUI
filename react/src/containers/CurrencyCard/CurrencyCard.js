@@ -391,6 +391,7 @@ class CurrencyCard extends React.Component {
     const {
       name,
       currencyid,
+      spotterid,
       endblock,
       parent,
       bestcurrencystate,
@@ -848,7 +849,7 @@ class CurrencyCard extends React.Component {
                 />
               </ExpansionPanelSummary>
             </ExpansionPanel>
-            {isToken && (
+            {currencyid !== spotterid && (
               <ExpansionPanel square expanded={false}>
                 <ExpansionPanelSummary
                   expandIcon={null}
