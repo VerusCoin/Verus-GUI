@@ -9,8 +9,8 @@ import { API_GET_CURRENCY_CONVERSION_PATHS } from '../../../constants/componentC
  * @param {String} dest The destination currency 
  * @param {Boolean} includeVia Whether or not to include currencies reachable through the via option
  */
-export const getCurrencyConversionPaths = async (mode, chainTicker, src, dest, includeVia = true) => {
-  let params = {chainTicker, src, dest, includeVia}
+export const getCurrencyConversionPaths = async (mode, chainTicker, src) => {
+  let params = {chainTicker, src}
 
   try {
     return await getApiData(mode, API_GET_CURRENCY_CONVERSION_PATHS, params)
