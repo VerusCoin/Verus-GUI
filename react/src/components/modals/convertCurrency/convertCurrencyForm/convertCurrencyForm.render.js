@@ -101,7 +101,7 @@ export const ConvertCurrencySuccessRender = function() {
 }
 
 export const ConvertCurrencyConfirmSimpleRender = function() {
-  const { selectedConversionPath, conversionPaths, confirmOutputIndex, outputs } = this.state;
+  const { selectedConversionPath, conversionPaths, confirmOutputIndex, outputs, fetchingFee, feeEstimate } = this.state;
 
   const output = outputs[confirmOutputIndex];
   const price = conversionPaths[selectedConversionPath]
@@ -152,7 +152,7 @@ export const ConvertCurrencyConfirmSimpleRender = function() {
             variant="outlined"
             value={
               conversionPaths[selectedConversionPath]
-                ? conversionPaths[selectedConversionPath].via.name
+                ? conversionPaths[selectedConversionPath].via.fullyqualifiedname
                 : output.via
             }
             InputProps={{
@@ -169,9 +169,54 @@ export const ConvertCurrencyConfirmSimpleRender = function() {
           variant="outlined"
           value={
             conversionPaths[selectedConversionPath]
-              ? conversionPaths[selectedConversionPath].destination.name
+              ? conversionPaths[selectedConversionPath].destination.fullyqualifiedname
               : output.convertto
           }
+          InputProps={{
+            readOnly: true,
+          }}
+        />
+      </div>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          paddingTop: 4,
+        }}
+      >
+        <TextField
+          style={{
+            flex: 1,
+            marginRight: 4,
+          }}
+          label="Estimated Conversion Fee"
+          variant="outlined"
+          value={`${
+            output.amount != null
+              ? output.via
+                ? Number((0.0005 * output.amount).toFixed(8))
+                : Number((0.00025 * output.amount).toFixed(8))
+              : "-"
+          } ${output.currency ? output.currency : "-"}`}
+          InputProps={{
+            readOnly: true,
+          }}
+        />
+        <TextField
+          style={{
+            flex: 1,
+            marginLeft: 4,
+          }}
+          label="Estimated Network Fee"
+          variant="outlined"
+          value={`${fetchingFee ?
+              "Loading..."
+              :
+              feeEstimate == null ?
+                "-"
+                :
+                Number((feeEstimate).toFixed(8))
+            } ${this.props.modalProps.chainTicker}`}
           InputProps={{
             readOnly: true,
           }}
@@ -199,26 +244,13 @@ export const ConvertCurrencyConfirmSimpleRender = function() {
         <TextField
           style={{
             flex: 1,
-            marginRight: 4,
-            marginLeft: 4,
-          }}
-          label="Estimated Fee"
-          variant="outlined"
-          value={`${fee} ${output.currency}`}
-          InputProps={{
-            readOnly: true,
-          }}
-        />
-        <TextField
-          style={{
-            flex: 1,
             marginLeft: 4,
           }}
           label="Receive (Estimated)"
           variant="outlined"
           value={`${this.state.conversionEstimate == null ? "Unknown" : this.state.conversionEstimate.estimatedcurrencyout} ${
             conversionPaths[selectedConversionPath]
-              ? conversionPaths[selectedConversionPath].destination.name
+              ? conversionPaths[selectedConversionPath].destination.fullyqualifiedname
               : output.convertto
           }`}
           InputProps={{
@@ -288,7 +320,7 @@ export const ConvertCurrencyConfirmSimpleRender = function() {
           <ErrorOutlineIcon style={{ marginRight: 8, marginLeft: 8 }} />
           <div style={{ fontSize: 14 }}>
             {
-              "Estimated price may vary from actual price, due to all conversions being bundled at block boundaries and solved simultaneously. The estimated fee does not currently take into account cross-chain fees (only relevant when sending off-chain or off-system), which may be significant. Fees will be more accurately estimated in a future update."
+              "Estimated price may vary from actual price, due to all conversions being bundled at block boundaries and solved simultaneously."
             }
           </div>
         </div>
@@ -302,17 +334,15 @@ export const ConvertCurrencyFormSimpleOptionText = function (conversionPath) {
   const destLabel = destination.fullyqualifiedname ? destination.fullyqualifiedname : destination.name
   const viaLabel = via == null ? null : via.fullyqualifiedname ? via.fullyqualifiedname : via.name
 
-  return `${destLabel}${
-    conversionPath.via
-      ? ` (${
-          conversionPath.exportto ? (conversionPath.gateway ? "off-system " : "off-chain ") : ""
-        }via ${viaLabel})`
+  return `${destLabel}${conversionPath.via
+      ? ` (${conversionPath.exportto ? (conversionPath.gateway ? `to ${conversionPath.exportto.name} network ` : `to ${conversionPath.exportto.name} network `) : ""
+      }via ${viaLabel})`
       : conversionPath.exportto
-      ? conversionPath.gateway
-        ? " (off-system)"
-        : " (off-chain)"
-      : ""
-  }`;
+        ? conversionPath.gateway
+          ? ` (to ${conversionPath.exportto.name} network)`
+          : ` (to ${conversionPath.exportto.name} network)`
+        : ""
+    }`;
 };
 
 export const ConvertCurrencyFormSimpleRender = function() {
@@ -323,7 +353,8 @@ export const ConvertCurrencyFormSimpleRender = function() {
     address,
     via,
     sendAmount,
-    exportto
+    exportto,
+    refundto
   } = this.state.outputs[0];
   const price = this.state.conversionPaths[this.state.selectedConversionPath]
     ? this.state.conversionPaths[this.state.selectedConversionPath].price
@@ -497,13 +528,16 @@ export const ConvertCurrencyFormSimpleRender = function() {
             />
           </div>
           <div style={{ display: "flex", marginTop: 8 }}>
-            <TextField
-              label="Destination"
-              variant="outlined"
-              size="small"
-              onChange={(e) => this.updateOutput("address", e.target.value)}
+            <SuggestionInput
               value={address}
-              style={{ flex: 1 }}
+              name="DestinationAddress"
+              items={exportto != null && exportto.length > 0 ? [] : this.state.addresses}
+              label={'Destination'}
+              size="small"
+              grouped={false}
+              freeSolo={true}
+              onChange={(e) => this.updateOutput("address", e.target.value)}
+              containerStyle={{ flex: 1 }}
             />
             {this.state.estArrivals[0] && (
               <TextField
@@ -531,6 +565,21 @@ export const ConvertCurrencyFormSimpleRender = function() {
               />
             )}
           </div>
+          {(exportto != null && exportto.length > 0) && (
+            <div style={{ display: "flex", marginTop: 8 }}>
+              <SuggestionInput
+                value={refundto}
+                name="RefundAddress"
+                items={this.state.addresses}
+                label={'Refund Address'}
+                size="small"
+                grouped={false}
+                freeSolo={true}
+                onChange={(e) => this.updateOutput("refundto", e.target.value)}
+                containerStyle={{ flex: 1 }}
+              />
+            </div>
+          )}
         </WalletPaper>
       </div>
       <div>
@@ -539,6 +588,43 @@ export const ConvertCurrencyFormSimpleRender = function() {
             style={{
               marginBottom: 8,
               flex: 1,
+              marginRight: 4,
+            }}
+            square={false}
+          >
+            <div style={{ fontWeight: "bold" }}>{`Est. conversion fee: ${
+              amount
+                ? via
+                  ? Number((0.0005 * amount).toFixed(8))
+                  : Number((0.00025 * amount).toFixed(8))
+                : "-"
+            } ${currency ? currency : "-"}`}</div>
+          </WalletPaper>
+          <WalletPaper
+            style={{
+              marginBottom: 8,
+              flex: 1,
+              marginLeft: 4,
+            }}
+            square={false}
+          >
+            <div style={{ fontWeight: "bold" }}>{`Est. network fee: ${
+              this.state.fetchingFee ? 
+                "Loading..." 
+                : 
+                this.state.feeEstimate == null ? 
+                  "-" 
+                  : 
+                  Number((this.state.feeEstimate).toFixed(8))
+            } ${this.props.modalProps.chainTicker}`}</div>
+          </WalletPaper>
+        </div>
+        <div style={{ display: "flex" }}>
+          <WalletPaper
+            style={{
+              marginBottom: 8,
+              flex: 1,
+              marginRight: 4,
             }}
             square={false}
           >
@@ -552,24 +638,6 @@ export const ConvertCurrencyFormSimpleRender = function() {
                   Number((this.state.conversionEstimate.estimatedcurrencyout / this.state.conversionEstimate.netinputamount).toFixed(8))
             }`}</div>
           </WalletPaper>
-        </div>
-        <div style={{ display: "flex" }}>
-          <WalletPaper
-            style={{
-              marginBottom: 8,
-              flex: 1,
-              marginRight: 4,
-            }}
-            square={false}
-          >
-            <div style={{ fontWeight: "bold" }}>{`Est. Fee: ${
-              amount
-                ? via
-                  ? Number((0.0005 * amount + (exportto ? 0.0201 : 0.0001)).toFixed(8))
-                  : Number((0.00025 * amount + (exportto ? 0.0201 : 0.0001)).toFixed(8))
-                : "-"
-            } ${currency ? currency : "-"}`}</div>
-          </WalletPaper>
           <WalletPaper
             style={{
               marginBottom: 8,
@@ -578,10 +646,10 @@ export const ConvertCurrencyFormSimpleRender = function() {
             }}
             square={false}
           >
-            <div style={{ fontWeight: "bold" }}>{`Est. Time: ${
+            <div style={{ fontWeight: "bold" }}>{`Est. time: ${
               this.state.selectedConversionPath != null
                 ? exportto
-                  ? "20-30 Min."
+                  ? "60-120 Min."
                   : "2-10 Min."
                 : "- Min."
             }`}</div>

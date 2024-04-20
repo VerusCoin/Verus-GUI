@@ -13,11 +13,12 @@ import {
   INFO_SNACK,
   MID_LENGTH_ALERT,
   NATIVE,
+  PUBLIC_ADDRS,
   SEND_RESULT,
   SIMPLE_CONVERSION,
   WHITELISTS,
 } from "../../../../util/constants/componentConstants";
-import { estimateConversion, getCurrencyConversionPaths, getIdentity, getRefundAddress, sendCurrency } from '../../../../util/api/wallet/walletCalls';
+import { estimateConversion, getCurrencyConversionPaths, getIdentity, getRefundAddress, sendCurrency, estimateSendcurrencyFee } from '../../../../util/api/wallet/walletCalls';
 import { expireData, newSnackbar, updateLocalWhitelists } from '../../../../actions/actionCreators';
 
 class ConvertCurrencyForm extends React.Component {
@@ -47,7 +48,9 @@ class ConvertCurrencyForm extends React.Component {
       loading: false,
 
       fetchingEstimate: false,
+      fetchingFee: false,
       conversionEstimate: null,
+      feeEstimate: null,
       lastSimpleAmountChange: 0
     };
 
@@ -109,7 +112,9 @@ class ConvertCurrencyForm extends React.Component {
       controlAmounts: true,
 
       fetchingEstimate: false,
+      fetchingFee: false,
       conversionEstimate: null,
+      feeEstimate: null,
       lastSimpleAmountChange: 0
     }, () => {
       this.processAddresses()
@@ -118,6 +123,8 @@ class ConvertCurrencyForm extends React.Component {
 
   componentDidUpdate(lastProps, lastState) {
     if (lastProps.mode !== this.props.mode) this.resetState()
+
+    if (lastProps.addresses !== this.props.addresses) this.processAddresses();
 
     const { conversionPaths, outputs, selectedConversionPath } = this.state
 
@@ -342,17 +349,72 @@ class ConvertCurrencyForm extends React.Component {
     }
   }
 
+  async updateFeeEstimate() {
+    if ((Date.now() - this.state.lastSimpleAmountChange) > this.AMOUNT_CHANGE_FETCH_ESTIMATE_COOLDOWN) {
+      const { outputs } = this.state
+
+      try {
+        if (outputs[0] != null) {
+          const pricingOutput = outputs[0];
+          const { currency, amount, convertto, via, preconvert, exportto } = pricingOutput;
+  
+          if (
+            currency != null && 
+            amount != null && 
+            convertto != null && 
+            currency.length != 0 && 
+            amount != 0 && 
+            convertto.length != 0
+          ) {
+            const estimate = await estimateSendcurrencyFee(
+              NATIVE, 
+              this.props.modalProps.chainTicker,
+              { currency, amount, convertto, preconvert, via, exportto },
+              1,
+              0.0001
+            );
+  
+            if (estimate.msg === 'success') {
+              this.setState({
+                fetchingFee: false,
+                feeEstimate: estimate.result
+              })
+            } else {
+              this.setState({
+                fetchingFee: false,
+                feeEstimate: null
+              })
+            }
+          } else {
+            this.setState({
+              fetchingFee: false,
+              feeEstimate: null
+            })
+          }
+        }
+      } catch(e) {
+        this.setState({
+          fetchingFee: false,
+          feeEstimate: null
+        })
+      }
+    }
+  }
+
   updateSimpleFormAmount(e) {
     const amount = e.target.value;
 
     setTimeout(() => {
       this.updateConversionEstimate()
+      this.updateFeeEstimate()
     }, this.AMOUNT_CHANGE_FETCH_ESTIMATE_COOLDOWN + 100)
 
     this.setState({
       lastSimpleAmountChange: Date.now(),
       conversionEstimate: null,
-      fetchingEstimate: true
+      feeEstimate: null,
+      fetchingEstimate: true,
+      fetchingFee: true
     }, () => {
       const validInput = this.isValidAmount(amount)
 
@@ -440,7 +502,9 @@ class ConvertCurrencyForm extends React.Component {
     this.setState({
       selectedConversionPath: path,
       conversionEstimate: null,
-      fetchingEstimate: true
+      feeEstimate: null,
+      fetchingEstimate: true,
+      fetchingFee: true
     }, () => {
       if (path != null) {    
         const selectedPathObj = this.state.conversionPaths[path]
@@ -449,10 +513,11 @@ class ConvertCurrencyForm extends React.Component {
         if (selectedPathObj.via) this.updateOutput("via", selectedPathObj.via.currencyid)
         else this.updateOutput("via", null)
 
-        if (selectedPathObj.exportto) this.updateOutput("exportto", selectedPathObj.exportto)
+        if (selectedPathObj.exportto) this.updateOutput("exportto", selectedPathObj.exportto.currencyid)
         else this.updateOutput("exportto", null)
 
         this.updateConversionEstimate()
+        this.updateFeeEstimate()
       }
     })
   }
@@ -461,26 +526,24 @@ class ConvertCurrencyForm extends React.Component {
     let addrList = []
 
     if (this.props.addresses) {
-      for (const x of Object.values(this.props.addresses)) {
-        for (const value of x) {
-          if (value.tag === 'identity' && !value.address.includes("@")) {
-            try {
-              const id = await getIdentity(
-                NATIVE,
-                this.props.modalProps.chainTicker,
-                value.address
-              );
-  
-              if (id.msg !== "success")
-                throw new Error("Error processing id for " + value.address);
-  
-              addrList.push(id.result.identity.name + "@");
-            } catch (e) {
-              console.error(e)
-              addrList.push(value.address);
-            }
-          } else addrList.push(value.address);
-        }
+      for (const value of this.props.addresses.public) {
+        if (value.tag === 'identity' && !value.address.includes("@")) {
+          try {
+            const id = await getIdentity(
+              NATIVE,
+              this.props.modalProps.chainTicker,
+              value.address
+            );
+
+            if (id.msg !== "success")
+              throw new Error("Error processing id for " + value.address);
+
+            addrList.push(id.result.identity.name + "@");
+          } catch (e) {
+            console.error(e)
+            addrList.push(value.address);
+          }
+        } else addrList.push(value.address);
       }
     }
 
