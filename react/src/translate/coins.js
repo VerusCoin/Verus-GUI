@@ -111,7 +111,7 @@ const coins = {
     ETH: 'Ethereum',
   },
   ERC20: {
-    RFOX: 'RedFOX Labs',
+    //RFOX: 'RedFOX Labs',
     AE: 'Aeternity',
     ANN: 'Agent Not Needed',
     BFT: 'BnkToTheFuture',
@@ -195,6 +195,7 @@ const coins = {
     //BNB: 'Binance Coin',
     BTK: 'BitcoinToken',
     DAI: 'Dai',
+    SAI: 'Sai',
     DDD: 'Scry.info',
     DGD: 'DigixDAO',
     DGPT: 'DigiPulse',
