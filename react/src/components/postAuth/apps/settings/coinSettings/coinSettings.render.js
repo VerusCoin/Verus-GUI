@@ -9,6 +9,7 @@ import {
   CHIPS_DISPLAY,
   REFUND_ADDR,
   REFUND_FROM_SOURCE,
+  NO_FAST_LOAD,
 } from "../../../../../util/constants/componentConstants";
 //import Terminal from 'terminal-in-react';
 import { ReactTerminal } from "react-terminal";
@@ -87,6 +88,7 @@ export const CoinSettingsOptionsRender = function() {
         const { type, displayName, options, hidden, info } = configTypes[settingKey];
 
         return ((settingKey === STAKE_GUARD ||
+          settingKey === NO_FAST_LOAD ||
           settingKey === REFUND_ADDR ||
           settingKey === REFUND_FROM_SOURCE) &&
           !selectedCoinObj.options.tags.includes(IS_VERUS)) ||
