@@ -25,8 +25,6 @@ class ConfigureNative extends React.Component {
     this.state = {
       done: false,
       updateProgressBar: {
-        proving: -1,
-        verifying: -1,
         output: -1,
         spend: -1,
         groth16: -1,
@@ -100,8 +98,6 @@ class ConfigureNative extends React.Component {
   initZcashParamsDl() {
     this.setState({
       updateProgressBar: {
-        proving: 0,
-        verifying: 0,
         output: 0,
         spend: 0,
         groth16: 0,

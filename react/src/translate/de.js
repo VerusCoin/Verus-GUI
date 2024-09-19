@@ -590,11 +590,7 @@ import coins from './coins';
     'WAIT_UNTIL_SYNCED': 'Transaktionsverlauf während der Synchronisierung nicht verfügbar',
     'TXID': 'Transaktions-ID',
     'ZCASH_PARAMS_MISSING': 'Zcash Parameter fehlen oder sind ungültig:',
-    'ZCASH_PARAMS_MISSING_ROOT_DIR': '- Root-Ordner fehlt',
-    'ZCASH_PARAMS_MISSING_PROVING_KEY': '- Prüfschlüssel fehlt',
-    'ZCASH_PARAMS_MISSING_VERIFYING_KEY': '- Verifizierungsschlüssel fehlt',
-    'ZCASH_PARAMS_MISSING_PROVING_KEY_SIZE': '- Größe des Prüfschlüssels falsch',
-    'ZCASH_PARAMS_MISSING_VERIFYING_KEY_SIZE': '- Größe des Verifizierungsschlüssel falsch'
+    'ZCASH_PARAMS_MISSING_ROOT_DIR': '- Root-Ordner fehlt'
   },
   'LOGIN': {
     'PIN_LOGIN_INFO': 'Sie können sich mit einem Login-Seed anmelden oder eine Pin wählen',

@@ -9,12 +9,6 @@ export const zcashParamsCheckErrors = (zcashParamsExist) => {
     if (!zcashParamsExist.rootDir) {
       _errors.push(translate('ZCPARAMS_FETCH.ZCASH_PARAMS_MISSING_ROOT_DIR'));
     }
-    if (!zcashParamsExist.provingKey) {
-      _errors.push(translate('ZCPARAMS_FETCH.ZCASH_PARAMS_MISSING_PROVING_KEY'));
-    }
-    if (!zcashParamsExist.verifyingKey) {
-      _errors.push(translate('ZCPARAMS_FETCH.ZCASH_PARAMS_MISSING_VERIFYING_KEY'));
-    }
     if (!zcashParamsExist.outputKey) {
       _errors.push(translate('ZCPARAMS_FETCH.ZCASH_PARAMS_MISSING_OUTPUT_PARAMS'));
     }
@@ -23,14 +17,6 @@ export const zcashParamsCheckErrors = (zcashParamsExist) => {
     }
     if (!zcashParamsExist.groth16Key) {
       _errors.push(translate('ZCPARAMS_FETCH.ZCASH_PARAMS_MISSING_GROTH16_PARAMS'));
-    }
-    if (!zcashParamsExist.provingKeySize &&
-        zcashParamsExist.provingKey) {
-      _errors.push(translate('ZCPARAMS_FETCH.ZCASH_PARAMS_MISSING_PROVING_KEY_SIZE'));
-    }
-    if (!zcashParamsExist.verifyingKeySize &&
-        zcashParamsExist.verifyingKey) {
-      _errors.push(translate('ZCPARAMS_FETCH.ZCASH_PARAMS_MISSING_VERIFYING_KEY_SIZE'));
     }
     if (!zcashParamsExist.spendKeySize &&
         zcashParamsExist.spendKey) {

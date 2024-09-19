@@ -3,7 +3,7 @@ import { CHECK_ZCASH_PARAMS, DL_ZCASH_PARAMS } from '../../constants/componentCo
 import { zcashParamsCheckErrors } from '../../zcashParams'
 
 /**
- * Checks if the zcash parameters and proving keys are installed and returns an error object.
+ * Checks if the zcash parameters are installed and returns an error object.
  */
 export const checkZcashParams = async () => {
   try {
@@ -28,7 +28,7 @@ export const checkZcashParamsFormatted = async() => {
 }
 
 /**
- * Calls the api to start downloading the zcash proving keys and parameters
+ * Calls the api to start downloading the zcash parameters
  * @param {String} dloption The download source, specified by the download option string (in constants file)
  */
 export const downloadZcashParams = async (dloption) => {
