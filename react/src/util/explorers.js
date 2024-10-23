@@ -21,7 +21,6 @@ export const EXPLORER_LIST = {
   BOTS: 'https://bots.kmdexplorer.io',
   MGW: 'https://mgw.kmdexplorer.io',
   WLC: 'https://wlc.kmdexplorer.io',
-  CHIPS: 'https://explorer.chips.cash',
   COQUI: 'https://explorer.coqui.cash',
   BTCH: 'https://btch.kmdexplorer.io',
   BTC: 'https://blockchain.info',
