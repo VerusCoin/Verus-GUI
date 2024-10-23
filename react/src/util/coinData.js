@@ -13,8 +13,6 @@ import {
   KOMODO_DAEMON,
   Z_ONLY,
   IS_VERUS,
-  ZCASH_DAEMON,
-  ZCASH_CONF_NAME,
   KOMODO_CONF_NAME,
   ERC20,
   VERUSTEST_CONF_NAME,
@@ -86,9 +84,6 @@ export const getCoinObj = (chainTicker, chainDefinition) => {
 
         if (chainTickerUc === "KMD")
           coinObj.options.confName = KOMODO_CONF_NAME; // komodo.conf
-      } else if (chainTickerUc === "ZEC") {
-        coinObj.options.daemon = ZCASH_DAEMON; // zcashd
-        coinObj.options.confName = ZCASH_CONF_NAME; // zcash.conf
       } else if (chainTickerUc === 'PIRATE') {
         coinObj.options.daemon = PIRATE_DAEMON;
       } else {

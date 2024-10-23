@@ -291,7 +291,6 @@ export const coindList = () => {
   const _coins = [
     'VRSCTEST',
     'KMD',
-    'CHIPS',
   ]
   .concat(kmdAssetChains);
 
@@ -306,7 +305,6 @@ export const isKomodoCoin = (coin) => {
 
 export const cryptoCoins = [
   'KMD',
-  'CHIPS',
   'STRAT',
   'TOA',
   'USC',
