@@ -248,10 +248,5 @@ export const coinDataDirectories = {
     darwin: "Komodo/ZEXO",
     linux: ".komodo/ZEXO",
     win32: "Komodo/ZEXO"
-  },
-  ZEC: {
-    darwin: "Zcash",
-    linux: ".zcash",
-    win32: "Zcash"
-  },
+  }
 };

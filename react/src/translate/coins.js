@@ -99,7 +99,6 @@ const coins = {
     BTX: 'Bitcore',
     QTUM: 'Qtum',
     BTCZ: 'BitcoinZ',
-    CHIPS: 'Chips',
     ERC: 'Europecoin',
     //XBC: 'BitcoinPlus',
     //ZET: 'Zetacoin',

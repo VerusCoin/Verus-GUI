@@ -102,11 +102,8 @@ export const testConfig = {
   "SPLTEST",
   "KMD",
   "KOMODO",
-  "zcashd",
   "pirated",
-  "komodod",
-  "chipsd",
-  "CHIPS"],
+  "komodod"],
   pubkey: "",
   exchanges: {
   coinswitchKey: ""
